@@ -97,11 +97,27 @@ class DeepReasearchAgent(Workflow):
         ),  
     )
 
-    
+
+# Orchestrates the research, analysis, and report writing process for a given topic
+    def run(self, topic:str)-> Iterator[RunResponse]:
+        
+        logger.info(f"Running deep reaseacher agent for tpoic : {topic}")
+
+        #step 1: Reseach
+        research_content = self.searcher.run(topic)
+
+        logger.info("Analysis started")
+        #step 2: Analysis
+        analysis = self.analyst.run(research_content.content)
+
+        logger.info("Report Writing Started")
+        # Step 3: Report Writing
+        report = self.writer.run(analysis.content, stream=True)
+        yield from report 
+
+
+
 
 
         
 
-        
-    
-    
