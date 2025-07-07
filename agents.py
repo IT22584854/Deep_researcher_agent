@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 
 load_dotenv()
 
-class DeepReasearchAgent(Workflow):
+class DeepResearcherAgent(Workflow):
 
     """
         A multi-stage research workflow that:
@@ -116,8 +116,25 @@ class DeepReasearchAgent(Workflow):
         yield from report 
 
 
+def run_research(query:str) -> str:
+    agent =  DeepResearcherAgent()
+    final_report_iterator = agent.run(
+        topic=query,
+    )
+    logger.info("Report Generated")
 
+    #collect all streaming content into a songle string
+    full_report = ""
+    for chunk in final_report_iterator:
+        if chunk.content:
+            full_report +=chunk.content
 
+    return full_report
+
+if __name__ == "__main__":
+    topic = "Extract information about Nebius AI Studio, including its features, capabilities, and applications from available sources."
+    response = run_research(topic)
+    print(response)
 
         
 
